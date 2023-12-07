@@ -1,0 +1,28 @@
+{% extends 'mailings/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<main>
+    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+        <div class="col">
+
+            <div class="card mb-4 rounded-3 shadow-sm">
+                <div class="card-header py-3">
+                    <h4 class="my-0 fw-normal">{{ message.subject }}</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>{{ message.body }}</li>
+                    </ul>
+                    <a class="w-100 btn btn-lg btn-success" href="{% url 'mailings:update_message' message.pk%}">Изменить</a>
+                    <a class="w-100 btn btn-lg btn btn-danger" href="{% url 'mailings:delete_message' message.pk%}">Удалить</a>
+                    <a class="w-100 btn btn-lg btn-primary" href="{% url 'mailings:create_message' %}">Создать новый</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+{% endblock %}

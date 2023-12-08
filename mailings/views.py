@@ -1,5 +1,5 @@
 from django.shortcuts import render, reverse
-from mailings.models import Message, Client
+from mailings.models import Message, Client, Settings
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 
@@ -81,6 +81,43 @@ class ClientDeleteView(DeleteView):
 
     def get_success_url(self):
         return reverse('mailings:all_clients')
+
+
+class SettingsListView(ListView):
+    """ shows all settings"""
+    model = Settings
+    template_name = 'mailings/settings_list.html'
+
+
+class SettingsCreateView(CreateView):
+    model = Settings
+    fields = ('periodicity', 'status', 'client')
+    template_name = 'mailings/settings_form.html'
+
+    def get_success_url(self):
+        return reverse('mailings:all_settings')
+
+#
+#
+# class ClientUpdateView(UpdateView):
+#     """makes changes in the model Client == UPDATE"""
+#     model = Client
+#     fields = ('name', 'fathers_name', 'surname', 'email', 'comment')
+#     template_name = 'mailings/client_form.html'
+#
+#     def get_success_url(self):
+#         return reverse('mailings:all_clients')
+#
+#
+# class ClientCreateView(CreateView):
+#     model = Client
+#     fields = ('name', 'fathers_name', 'surname', 'email', 'comment')
+#     template_name = 'mailings/client_form.html'
+#
+#     def get_success_url(self):
+#         return reverse('mailings:all_clients')
+
+
 
 
 # def main_page(request):

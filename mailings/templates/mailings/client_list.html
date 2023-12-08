@@ -24,7 +24,7 @@
                 <li>{{ client.comment|slice:":50" }}</li>
               </ul>
               <a class="w-100 btn btn-lg btn-outline-primary" href="{% url 'mailings:client_detail' client.pk%}">Просмотр</a>
-              <a class="w-100 btn btn-lg btn btn-outline-warning" href="#">Рассылки ПОТОМ</a>
+              <a class="w-100 btn btn-lg btn btn-outline-warning" href="{% url 'mailings:all_settings' %}">Просмотреть рассылки</a>
             </div>
           </div>
         </div>

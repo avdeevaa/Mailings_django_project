@@ -136,7 +136,7 @@
 
       <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
         <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="{% url 'mailings:main_page' %}">Все рассылки</a>
-        <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="#">Добавить ссылку</a>
+        <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="{% url 'mailings:all_clients' %}">Клиенты</a>
         <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="#">Добавить ссылку</a>
         <a class="py-2 link-body-emphasis text-decoration-none" href="#">Добавить ссылку</a>
       </nav>
@@ -155,10 +155,7 @@
       <div class="col-6 col-md">
         <h5>Клиенты</h5>
         <ul class="list-unstyled text-small">
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Добавить ссылку например CRUD</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Добавить ссылку</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Добавить ссылку</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Добавить ссылку</a></li>
+          <li class="mb-1"><a class="link-secondary text-decoration-none" href="{% url 'mailings:all_clients' %}">Просмотреть</a></li>
         </ul>
       </div>
       <div class="col-6 col-md">

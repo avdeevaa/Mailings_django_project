@@ -1,5 +1,5 @@
 from django.shortcuts import render, reverse
-from mailings.models import Message
+from mailings.models import Message, Client
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 
@@ -42,6 +42,47 @@ class MessageCreateView(CreateView):
     def get_success_url(self):
         return reverse('mailings:main_page')
 
+
+class ClientListView(ListView):
+    """ shows all clients"""
+    model = Client
+    template_name = 'mailings/client_list.html'
+
+
+class ClientDetailView(DetailView):
+    """ shows one item (one client)"""
+    model = Client
+    template_name = 'mailings/client_detail.html'
+
+
+class ClientUpdateView(UpdateView):
+    """makes changes in the model Client == UPDATE"""
+    model = Client
+    fields = ('name', 'fathers_name', 'surname', 'email', 'comment')
+    template_name = 'mailings/client_form.html'
+
+    def get_success_url(self):
+        return reverse('mailings:all_clients')
+
+
+class ClientCreateView(CreateView):
+    model = Client
+    fields = ('name', 'fathers_name', 'surname', 'email', 'comment')
+    template_name = 'mailings/client_form.html'
+
+    def get_success_url(self):
+        return reverse('mailings:all_clients')
+
+
+class ClientDeleteView(DeleteView):
+    """deletes one model of Client"""
+    model = Client
+    template_name = 'mailings/client_confirm_delete.html'
+
+    def get_success_url(self):
+        return reverse('mailings:all_clients')
+
+
 # def main_page(request):
 #     # products_list = Product.objects.all()
 #     # context = {
@@ -79,16 +120,7 @@ class MessageCreateView(CreateView):
 # #         'product': product
 # #     }
 # #     return render(request, 'design/item_detail.html', context)
-#
-#
-# class BlogCreateView(CreateView):
-#     model = Blog
-#     fields = ('title', 'content', 'preview', 'creation_date', 'publication_sign')
-#     template_name = 'design/blog_form.html'
-#
-#     def get_success_url(self):
-#         return reverse('catalog:read_blog')
-#
+
 
 #
 # class BlogListView(ListView):
@@ -110,11 +142,3 @@ class MessageCreateView(CreateView):
 #         self.object.number_of_views += 1
 #         self.object.save()
 #         return self.object
-#
-#
-# class BlogDeleteView(DeleteView):
-#     model = Blog
-#     template_name = 'design/blog_confirm_delete.html'
-#
-#     def get_success_url(self):
-#         return reverse('catalog:read_blog')

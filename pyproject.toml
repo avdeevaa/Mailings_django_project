@@ -10,6 +10,7 @@ packages = [{include = "mailings_django_project"}]
 python = "^3.11"
 django = "^5.0"
 psycopg2 = "^2.9.9"
+apscheduler = "^3.10.4"
 
 
 [build-system]

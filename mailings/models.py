@@ -17,6 +17,20 @@ class Client(models.Model):
         ordering = ('surname',)
 
 
+class Message(models.Model):
+    subject = models.CharField(max_length=300, verbose_name="тема письма")
+    body = models.TextField(verbose_name="тело письма")
+
+    # settings = models.ForeignKey(Settings, on_delete=models.CASCADE, verbose_name="Настройки рассылки")
+
+    def __str__(self):
+        return f'{self.subject} : {self.body}'
+
+    class Meta:
+        verbose_name = "сообщение для рассылки"
+        verbose_name_plural = "сообщения для рассылки"
+
+
 class Settings(models.Model):
 
     FREQUENCY_CHOICES = [
@@ -31,11 +45,12 @@ class Settings(models.Model):
         ('started', 'Started'),
     ]
 
-    mailing_time = models.DateField(verbose_name="время рассылки", auto_now=True)
+    mailing_time = models.DateTimeField(verbose_name="время рассылки", auto_now=True)
     periodicity = models.CharField(verbose_name="периодичность", max_length=20, choices=FREQUENCY_CHOICES, default='once_a_day')
     status = models.CharField(verbose_name="статус рассылки", max_length=20, choices=STATUS_CHOICES, default='created')
 
     client = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name="Клиент")
+    message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='Сообщение')
 
     def __str__(self):
         return f'Письмо отослано в {self.mailing_time} : {self.status}'
@@ -45,26 +60,12 @@ class Settings(models.Model):
         verbose_name_plural = "настройки"
 
 
-class Message(models.Model):
-    subject = models.CharField(max_length=300, verbose_name="тема письма")
-    body = models.TextField(verbose_name="тело письма")
-
-    settings = models.ForeignKey(Settings, on_delete=models.CASCADE, verbose_name="Настройки рассылки")
-
-    def __str__(self):
-        return f'{self.subject} : {self.body}'
-
-    class Meta:
-        verbose_name = "сообщение для рассылки"
-        verbose_name_plural = "сообщения для рассылки"
-
-
 class Logs(models.Model):
     last_attempt = models.DateTimeField(verbose_name="Дата и время последней попытки", auto_now=True)
     status = models.IntegerField(verbose_name="статус попытки", null=True, blank=True)
     response = models.IntegerField(verbose_name="ответ почтового сервера", null=True, blank=True)
 
-    message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name="Сообщение для рассылки")
+    settings = models.ForeignKey(Settings, on_delete=models.CASCADE, verbose_name="Настройки рассылки")
 
     def __str__(self):
         return f'{self.last_attempt}'

@@ -91,91 +91,9 @@ class SettingsListView(ListView):
 
 class SettingsCreateView(CreateView):
     model = Settings
-    fields = ('periodicity', 'status', 'client')
+    fields = ('periodicity', 'status', 'client', 'message')
     template_name = 'mailings/settings_form.html'
 
     def get_success_url(self):
         return reverse('mailings:all_settings')
 
-#
-#
-# class ClientUpdateView(UpdateView):
-#     """makes changes in the model Client == UPDATE"""
-#     model = Client
-#     fields = ('name', 'fathers_name', 'surname', 'email', 'comment')
-#     template_name = 'mailings/client_form.html'
-#
-#     def get_success_url(self):
-#         return reverse('mailings:all_clients')
-#
-#
-# class ClientCreateView(CreateView):
-#     model = Client
-#     fields = ('name', 'fathers_name', 'surname', 'email', 'comment')
-#     template_name = 'mailings/client_form.html'
-#
-#     def get_success_url(self):
-#         return reverse('mailings:all_clients')
-
-
-
-
-# def main_page(request):
-#     # products_list = Product.objects.all()
-#     # context = {
-#     #     'object_list': products_list
-#     # }
-#     return render(request, 'mailings/main_page.html', )
-# #
-#
-# def contact_page(request):
-#     if request.method == "POST":
-#         name = request.POST.get('name')
-#         phone = request.POST.get('phone')
-#         message = request.POST.get('message')
-#         print(f"Форма обрабатывает {name}, {phone}, {message}")
-#     return render(request, 'design/contact_page.html')
-#
-#
-# def items_page(request):
-#     products_list = Product.objects.all()
-#     context = {
-#         'object_list': products_list
-#     }
-#     return render(request, 'design/items_page.html', context)
-#
-#
-# class ProductDetailView(DetailView):
-#     """ replaces item_detail"""
-#     model = Product
-#     template_name = 'design/item_detail.html'
-#
-# #
-# # def item_detail(request, pk):
-# #     product = get_object_or_404(Product, pk=pk)
-# #     context = {
-# #         'product': product
-# #     }
-# #     return render(request, 'design/item_detail.html', context)
-
-
-#
-# class BlogListView(ListView):
-#     model = Blog
-#     template_name = 'design/blog_list.html'
-#
-#     def get_queryset(self, *args, **kwargs):
-#         queryset = super().get_queryset()
-#         queryset = queryset.filter(publication_sign=True)
-#         return queryset
-#
-#
-# class BlogDetailView(DetailView):
-#     model = Blog
-#     template_name = 'design/blog_detail.html'
-#
-#     def get_object(self, queryset=None):
-#         self.object = super().get_object(queryset)
-#         self.object.number_of_views += 1
-#         self.object.save()
-#         return self.object

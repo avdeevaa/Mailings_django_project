@@ -23,7 +23,7 @@
                 <li>Время рассылки: {{ settings.mailing_time }}</li>
                 <li>Периодичность: {{ settings.periodicity}}</li>
                 <li>Статус: {{ settings.status}}</li>
-                <a href="{% url 'mailings:client_detail' settings.pk%}" class="text-decoration-none">Клиент:</a><li> {{ settings.client}}</li>
+                <li>Клиент: {{ settings.client}}</li>
               </ul>
               <a class="w-100 btn btn-lg btn btn-outline-warning" href="{% url 'mailings:create_settings' %}">Добавить новую</a>
             </div>

@@ -4,6 +4,7 @@ import os
 from django.core.mail import send_mail
 from django.db import connections
 from config import settings
+from mailings.models import Message, Client, Settings
 
 
 class DBManager:
@@ -49,9 +50,7 @@ class DBManager:
 
 
 def send_mailing():
-    # print("Я отправил")  # Эта штука работает прекрасно
-
-    dbmanager = DBManager()  # Создаем экземпляр класса DBManager
+    dbmanager = DBManager()
     all_settings = dbmanager.connect_to_settings()
 
     time = datetime.now()
@@ -61,12 +60,17 @@ def send_mailing():
     for setting in all_settings:
         row_id, mailing_time, periodicity, status, client_id, message_id = setting
 
+        settings_object = Settings.objects.get(id=row_id)
+        message_object = settings_object.message  # Здесь мы вытаскиваем по айди сообщение, которое посылаем потом
+
+        client_object = settings_object.client  # А здесь клиента, чтобы потом послать емаил!
+
         if current_time == mailing_time.strftime("%Y-%m-%d") and status == 'created':
             send_mail(
-                "theme",
-                'HI HI HI',
+                message_object.subject,
+                message_object.body,
                 settings.EMAIL_HOST_USER,
-                ['zi_daae@mail.ru']  ### to doo - client id,
+                [client_object.email]
             )
             new_status = 'completed'
             dbmanager.update_status(row_id, new_status)
@@ -97,7 +101,7 @@ formatted_now = now.strftime("%Y-%m-%d %H:%M:%S")
 def start():
     """запускает APScheduler"""
     scheduler = BackgroundScheduler()
-    # scheduler.add_job(send_mailing, 'interval', seconds=15)  # каждых 15 сек запускает функцию send mailing
+    # scheduler.add_job(send_mailing, 'interval', seconds=15)
     scheduler.add_job(send_mailing, 'interval', seconds=50)
     # scheduler.add_job(send_mailing, 'cron', hour=8, minute=10)
     scheduler.start()

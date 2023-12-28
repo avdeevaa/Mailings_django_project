@@ -55,12 +55,13 @@ def send_mailing():
     all_settings = dbmanager.connect_to_settings()
 
     time = datetime.now()
-    # current_time = time.strftime("%H:%M:%S")
+    current_time = time.strftime("%Y-%m-%d")
+    # Вот так это создает проблему с часовыми поясами ("%Y-%m-%d %H:%M:%S")
 
     for setting in all_settings:
         row_id, mailing_time, periodicity, status, client_id, message_id = setting
 
-        if status == 'created':
+        if current_time == mailing_time.strftime("%Y-%m-%d") and status == 'created':
             send_mail(
                 "theme",
                 'HI HI HI',

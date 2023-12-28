@@ -1,5 +1,5 @@
 from django.shortcuts import render, reverse
-from mailings.models import Message, Client, Settings
+from mailings.models import Message, Client, Settings, Logs
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 
@@ -96,4 +96,10 @@ class SettingsCreateView(CreateView):
 
     def get_success_url(self):
         return reverse('mailings:all_settings')
+
+
+class LogsListView(ListView):
+    """ shows all logs"""
+    model = Logs
+    template_name = 'mailings/logs_list.html'
 

@@ -138,7 +138,8 @@
         <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="{% url 'mailings:main_page' %}">Все рассылки</a>
         <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="{% url 'mailings:all_clients' %}">Клиенты</a>
         <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="{% url 'mailings:all_settings' %}">Настройки</a>
-        <a class="py-2 link-body-emphasis text-decoration-none" href="#">Добавить ссылку</a>
+        <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="{% url 'mailings:all_logs' %}">Логи рассылки</a>
+        <a class="py-2 link-body-emphasis text-decoration-none" href="#">BLOG</a>
       </nav>
     </div>
 
@@ -163,10 +164,11 @@
         <ul class="list-unstyled text-small">
           <li class="mb-1"><a class="link-secondary text-decoration-none" href="{% url 'mailings:all_settings' %}">Просмотреть</a></li>
           <li class="mb-1"><a class="link-secondary text-decoration-none" href="{% url 'mailings:create_settings' %}">Создать</a></li>
+          <li class="mb-1"><a class="link-secondary text-decoration-none" href="{% url 'mailings:all_logs' %}">Отчет о рассылках (логи)</a></li>
         </ul>
       </div>
       <div class="col-6 col-md">
-        <h5>Логи рассылки</h5>
+        <h5>Блог</h5>
         <ul class="list-unstyled text-small">
           <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Добавить ссылку</a></li>
           <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Добавить ссылку</a></li>

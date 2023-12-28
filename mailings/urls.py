@@ -1,5 +1,6 @@
 from django.urls import path
-from mailings.views import MessageListView, MessageDetailView, MessageUpdateView, MessageDeleteView, MessageCreateView
+from mailings.views import MessageListView, MessageDetailView, MessageUpdateView, MessageDeleteView, MessageCreateView, \
+    LogsListView
 from mailings.views import ClientListView, ClientDetailView, ClientUpdateView, ClientCreateView, ClientDeleteView
 from mailings.views import SettingsListView, SettingsCreateView
 
@@ -23,4 +24,6 @@ urlpatterns = [
 
     path('settings/', SettingsListView.as_view(), name='all_settings'),
     path('create_settings', SettingsCreateView.as_view(), name='create_settings'),
+
+    path('logs/', LogsListView.as_view(), name='all_logs')
 ]

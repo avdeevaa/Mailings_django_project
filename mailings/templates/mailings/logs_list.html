@@ -1,0 +1,37 @@
+{% extends 'mailings/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+      <p class="fs-5 text-primary-emphasis">На этой страничке вы просматриваете отчет о проведенных рассылках</p>
+
+</div>
+
+<main>
+  <div class="container">
+    <div class="row">
+      {% for logs in object_list %}
+        <div class="col-md-4">
+          <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3">
+              <h4 class="text-primary">Сообщение номер {{ logs.pk }} было отправлено</h4>
+            </div>
+            <div class="card-body">
+              <ul class="list-unstyled mt-3 mb-4">
+                <li>Дата и время: {{ logs.last_attempt }}</li>
+                <li>Статус: {{ logs.status }}</li>
+                <li>{{ logs.response }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {% if forloop.counter|divisibleby:3 and not forloop.last %}
+          </div><div class="row">
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</main>
+{% endblock %}

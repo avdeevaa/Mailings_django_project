@@ -31,7 +31,7 @@ class DBManager:
             return result
 
     def update_mailing_time(self, row_id, new_mailing_time):
-        """записывает время рассылки"""
+        """Записывает время рассылки"""
         with self.connect().cursor() as cur:
             cur.execute(
                 f'UPDATE mailings_settings SET mailing_time = %s WHERE id = %s',
@@ -40,11 +40,20 @@ class DBManager:
         self.disconnect()
 
     def update_status(self, row_id, new_status):
-        """записывает новый статус"""
+        """Записывает новый статус"""
         with self.connect().cursor() as cur:
             cur.execute(
                 f'UPDATE mailings_settings SET status = %s WHERE id = %s',
                 (new_status, row_id)
+            )
+        self.disconnect()
+
+    def write_logs(self, row_id, mailing_time, new_status, response):
+        """Записывает дату и время последней попытки, новый статус, ответ почтового сервера"""
+        with self.connect().cursor() as cur:
+            cur.execute(
+                'INSERT INTO mailings_logs (last_attempt, status, response, settings_id) VALUES (%s, %s, %s, %s)',
+                (mailing_time, new_status, response, row_id)
             )
         self.disconnect()
 
@@ -66,7 +75,7 @@ def send_mailing():
         client_object = settings_object.client  # А здесь клиента, чтобы потом послать емаил!
 
         if current_time == mailing_time.strftime("%Y-%m-%d") and status == 'created':
-            send_mail(
+            sent_count = send_mail(
                 message_object.subject,
                 message_object.body,
                 settings.EMAIL_HOST_USER,
@@ -74,6 +83,13 @@ def send_mailing():
             )
             new_status = 'completed'
             dbmanager.update_status(row_id, new_status)
+
+            if sent_count > 0:
+                response = f'Письмо успешно отправлено по адресу {client_object.email}'
+            else:
+                response = f'Письмо не отправилось по адресу {client_object.email}'
+
+            dbmanager.write_logs(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), new_status, response, row_id)
 
         else:
             if periodicity == 'once_a_day' and status == 'completed':
@@ -91,11 +107,9 @@ def send_mailing():
     dbmanager.disconnect()
 
 
-
 now = datetime.now()
 formatted_now = now.strftime("%Y-%m-%d %H:%M:%S")
 # print(formatted_now)
-
 
 
 def start():

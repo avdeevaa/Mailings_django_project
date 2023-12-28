@@ -61,9 +61,9 @@ class Settings(models.Model):
 
 
 class Logs(models.Model):
-    last_attempt = models.DateTimeField(verbose_name="Дата и время последней попытки", auto_now=True)
-    status = models.IntegerField(verbose_name="статус попытки", null=True, blank=True)
-    response = models.IntegerField(verbose_name="ответ почтового сервера", null=True, blank=True)
+    last_attempt = models.CharField(verbose_name="Дата и время последней попытки", max_length=25)  # При типе данных DateTimeField возникает ошибка с записью в БД
+    status = models.CharField(max_length=50, verbose_name="статус попытки", default='completed')
+    response = models.CharField(max_length=150, verbose_name="ответ почтового сервера", null=True, blank=True)
 
     settings = models.ForeignKey(Settings, on_delete=models.CASCADE, verbose_name="Настройки рассылки")
 

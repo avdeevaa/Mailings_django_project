@@ -55,12 +55,12 @@ def send_mailing():
     all_settings = dbmanager.connect_to_settings()
 
     time = datetime.now()
-    current_time = time.strftime("%H:%M:%S")
+    # current_time = time.strftime("%H:%M:%S")
 
     for setting in all_settings:
         row_id, mailing_time, periodicity, status, client_id, message_id = setting
 
-        if current_time == mailing_time.strftime("%H:%M:%S") and status == 'created':
+        if status == 'created':
             send_mail(
                 "theme",
                 'HI HI HI',
@@ -97,8 +97,8 @@ def start():
     """запускает APScheduler"""
     scheduler = BackgroundScheduler()
     # scheduler.add_job(send_mailing, 'interval', seconds=15)  # каждых 15 сек запускает функцию send mailing
-    # scheduler.add_job(send_mailing, 'interval', seconds=50)
-    scheduler.add_job(send_mailing, 'cron', hour=19, minute=10)
+    scheduler.add_job(send_mailing, 'interval', seconds=50)
+    # scheduler.add_job(send_mailing, 'cron', hour=8, minute=10)
     scheduler.start()
 
 

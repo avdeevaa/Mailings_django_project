@@ -1,10 +1,12 @@
+from smtplib import SMTPDataError
+
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime, timedelta
 import os
 from django.core.mail import send_mail
 from django.db import connections
 from config import settings
-from mailings.models import Message, Client, Settings
+from mailings.models import Message, Client, Settings, Logs
 
 
 class DBManager:
@@ -48,14 +50,14 @@ class DBManager:
             )
         self.disconnect()
 
-    def write_logs(self, row_id, mailing_time, new_status, response):
+    def write_logs(self, mailing_time, new_status, response, row_id):
         """Записывает дату и время последней попытки, новый статус, ответ почтового сервера"""
-        with self.connect().cursor() as cur:
-            cur.execute(
-                'INSERT INTO mailings_logs (last_attempt, status, response, settings_id) VALUES (%s, %s, %s, %s)',
-                (mailing_time, new_status, response, row_id)
-            )
-        self.disconnect()
+        logs_entry = Logs.objects.create(
+            last_attempt=mailing_time,
+            status=new_status,
+            response=response,
+            settings_id=row_id
+        )
 
 
 def send_mailing():
@@ -75,21 +77,26 @@ def send_mailing():
         client_object = settings_object.client  # А здесь клиента, чтобы потом послать емаил!
 
         if current_time == mailing_time.strftime("%Y-%m-%d") and status == 'created':
-            sent_count = send_mail(
-                message_object.subject,
-                message_object.body,
-                settings.EMAIL_HOST_USER,
-                [client_object.email]
-            )
-            new_status = 'completed'
-            dbmanager.update_status(row_id, new_status)
+            try:
+                sent_count = send_mail(
+                    message_object.subject,
+                    message_object.body,
+                    settings.EMAIL_HOST_USER,
+                    [client_object.email]
+                )
+                new_status = 'completed'
+                dbmanager.update_status(row_id, new_status)
 
-            if sent_count > 0:
-                response = f'Письмо успешно отправлено по адресу {client_object.email}'
-            else:
-                response = f'Письмо не отправилось по адресу {client_object.email}'
+                if sent_count > 0:
+                    response = f'Successfully_sent_to_{client_object.email}'
+                else:
+                    response = f'Failed_{client_object.email}'
 
-            dbmanager.write_logs(datetime.now().strftime('%Y-%m-%d %H:%M:%S'), new_status, response, row_id)
+            except SMTPDataError:
+                new_status = 'completed'
+                response = f'Failed_{client_object.email}'
+
+            dbmanager.write_logs(datetime.now().strftime('%Y-%m-%d_%H-%M'), new_status, response, row_id)
 
         else:
             if periodicity == 'once_a_day' and status == 'completed':

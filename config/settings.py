@@ -111,7 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Prague'
 
 USE_I18N = True
 
@@ -144,3 +144,6 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'project.skypro@yandex.ru'
 EMAIL_HOST_PASSWORD = 'zjkibdkpeflxlouk'
 EMAIL_USE_TLS = True
+
+
+

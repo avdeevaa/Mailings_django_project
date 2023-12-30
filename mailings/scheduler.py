@@ -5,6 +5,8 @@ from datetime import datetime, timedelta
 import os
 from django.core.mail import send_mail
 from django.db import connections
+from django.utils import timezone
+
 from config import settings
 from mailings.models import Message, Client, Settings, Logs
 
@@ -52,6 +54,7 @@ class DBManager:
 
     def write_logs(self, mailing_time, new_status, response, row_id):
         """Записывает дату и время последней попытки, новый статус, ответ почтового сервера"""
+        # mailing_time_aware = timezone.make_aware(mailing_time)
         logs_entry = Logs.objects.create(
             last_attempt=mailing_time,
             status=new_status,
@@ -59,24 +62,20 @@ class DBManager:
             settings_id=row_id
         )
 
-
 def send_mailing():
     dbmanager = DBManager()
     all_settings = dbmanager.connect_to_settings()
 
-    time = datetime.now()
-    current_time = time.strftime("%Y-%m-%d")
-    # Вот так это создает проблему с часовыми поясами ("%Y-%m-%d %H:%M:%S")
+    current_time = timezone.now()
 
     for setting in all_settings:
         row_id, mailing_time, periodicity, status, client_id, message_id = setting
 
         settings_object = Settings.objects.get(id=row_id)
-        message_object = settings_object.message  # Здесь мы вытаскиваем по айди сообщение, которое посылаем потом
+        message_object = settings_object.message
+        client_object = settings_object.client
 
-        client_object = settings_object.client  # А здесь клиента, чтобы потом послать емаил!
-
-        if current_time == mailing_time.strftime("%Y-%m-%d") and status == 'created':
+        if current_time.date() == mailing_time.date() and status == 'created':
             try:
                 sent_count = send_mail(
                     message_object.subject,
@@ -88,15 +87,55 @@ def send_mailing():
                 dbmanager.update_status(row_id, new_status)
 
                 if sent_count > 0:
-                    response = f'Successfully_sent_to_{client_object.email}'
+                    response = f'Success {client_object.email}'
                 else:
-                    response = f'Failed_{client_object.email}'
+                    response = f'Fail {client_object.email}'
 
             except SMTPDataError:
                 new_status = 'completed'
-                response = f'Failed_{client_object.email}'
+                response = f'Fail {client_object.email}'
 
-            dbmanager.write_logs(datetime.now().strftime('%Y-%m-%d_%H-%M'), new_status, response, row_id)
+            # Передаем mailing_time напрямую без make_aware
+            dbmanager.write_logs(mailing_time, new_status, response, row_id)
+
+        # def send_mailing():
+#     dbmanager = DBManager()
+#     all_settings = dbmanager.connect_to_settings()
+#
+#     time = timezone.now()
+#     # current_time = time.strftime("%Y-%m-%d")
+#     # Вот так это создает проблему с часовыми поясами ("%Y-%m-%d %H:%M:%S")
+#
+#     for setting in all_settings:
+#         row_id, mailing_time, periodicity, status, client_id, message_id = setting
+#
+#         settings_object = Settings.objects.get(id=row_id)
+#         message_object = settings_object.message  # Здесь мы вытаскиваем по айди сообщение, которое посылаем потом
+#
+#         client_object = settings_object.client  # А здесь клиента, чтобы потом послать емаил!
+#
+#         if time.date() == mailing_time.date() and status == 'created':
+#         # if current_time == mailing_time.strftime("%Y-%m-%d") and status == 'created':
+#             try:
+#                 sent_count = send_mail(
+#                     message_object.subject,
+#                     message_object.body,
+#                     settings.EMAIL_HOST_USER,
+#                     [client_object.email]
+#                 )
+#                 new_status = 'completed'
+#                 dbmanager.update_status(row_id, new_status)
+#
+#                 if sent_count > 0:
+#                     response = f'Success {client_object.email}'
+#                 else:
+#                     response = f'Failed {client_object.email}'
+#
+#             except SMTPDataError:
+#                 new_status = 'completed'
+#                 response = f'Failed {client_object.email}'
+#
+#             dbmanager.write_logs(time, new_status, response, row_id)
 
         else:
             if periodicity == 'once_a_day' and status == 'completed':

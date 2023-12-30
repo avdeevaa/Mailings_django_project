@@ -61,7 +61,7 @@ class Settings(models.Model):
 
 
 class Logs(models.Model):
-    last_attempt = models.CharField(verbose_name="Дата и время последней попытки", max_length=200)  # При типе данных DateTimeField возникает ошибка с записью в БД
+    last_attempt = models.DateTimeField(verbose_name="Дата и время последней попытки")  # При типе данных DateTimeField возникает ошибка с записью в БД
     status = models.CharField(max_length=200, verbose_name="статус попытки", default='completed')
     response = models.CharField(max_length=200, verbose_name="ответ почтового сервера", null=True, blank=True)
 

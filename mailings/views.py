@@ -1,5 +1,5 @@
 from django.shortcuts import render, reverse
-from mailings.models import Message, Client, Settings, Logs
+from mailings.models import Message, Client, Settings, Logs, Blog
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 
@@ -102,4 +102,49 @@ class LogsListView(ListView):
     """ shows all logs"""
     model = Logs
     template_name = 'mailings/logs_list.html'
+
+
+#  часть 2 - добавляем вьюшки для блога
+
+
+class BlogCreateView(CreateView):
+    model = Blog
+    fields = ('title', 'content', 'image', 'date_of_publication')
+    template_name = 'mailings/blog_form.html'
+
+    def get_success_url(self):
+        return reverse('mailings:read_blog')
+
+
+class BlogUpdateView(UpdateView):
+    model = Blog
+    fields = ('title', 'content', 'image', 'date_of_publication')
+    template_name = 'mailings/blog_form.html'
+
+    def get_success_url(self):
+        return reverse('mailings:read_blog')
+
+
+class BlogListView(ListView):
+    model = Blog
+    template_name = 'mailings/blog_list.html'
+
+
+class BlogDetailView(DetailView):
+    model = Blog
+    template_name = 'mailings/blog_detail.html'
+
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset)
+        self.object.number_of_views += 1
+        self.object.save()
+        return self.object
+
+
+class BlogDeleteView(DeleteView):
+    model = Blog
+    template_name = 'mailings/blog_confirm_delete.html'
+
+    def get_success_url(self):
+        return reverse('mailings:read_blog')
 

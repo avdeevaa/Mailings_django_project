@@ -74,3 +74,18 @@ class Logs(models.Model):
         verbose_name = "лог рассылки"
         verbose_name_plural = "логи рассылки"
 
+
+class Blog(models.Model):
+    title = models.CharField(max_length=300, verbose_name="заголовок")
+    content = models.TextField(verbose_name='содержимое статьи')
+    image = models.ImageField(upload_to='mailings/images/', verbose_name='изображение', null=True, blank=True)
+    number_of_views = models.PositiveIntegerField(default=0, verbose_name="количество просмотров")
+    date_of_publication = models.DateField(verbose_name='дата публикации')
+
+    def __str__(self):
+        return f'{self.title} -- {self.content}'
+
+    class Meta:
+        verbose_name = "блог"
+        verbose_name_plural = "блоги"
+

@@ -139,7 +139,7 @@
         <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="{% url 'mailings:all_clients' %}">Клиенты</a>
         <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="{% url 'mailings:all_settings' %}">Настройки</a>
         <a class="me-3 py-2 link-body-emphasis text-decoration-none" href="{% url 'mailings:all_logs' %}">Логи рассылки</a>
-        <a class="py-2 link-body-emphasis text-decoration-none" href="#">BLOG</a>
+        <a class="py-2 link-body-emphasis text-decoration-none" href="{% url 'mailings:read_blog' %}">BLOG</a>
       </nav>
     </div>
 
@@ -170,10 +170,7 @@
       <div class="col-6 col-md">
         <h5>Блог</h5>
         <ul class="list-unstyled text-small">
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Добавить ссылку</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Добавить ссылку</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Добавить ссылку</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Добавить ссылку</a></li>
+          <li class="mb-1"><a class="link-secondary text-decoration-none" href="{% url 'mailings:read_blog' %}">Все записи</a></li>
         </ul>
       </div>
     </div>

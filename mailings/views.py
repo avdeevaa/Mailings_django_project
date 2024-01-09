@@ -1,12 +1,33 @@
+from random import sample
+
 from django.shortcuts import render, reverse
 from mailings.models import Message, Client, Settings, Logs, Blog
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 
+def main_page(request):
+
+    total_messages_count = Message.objects.count()
+    active_logs_count = Logs.objects.count()
+    active_clients_count = Client.objects.count()
+
+    all_blogs = Blog.objects.all()
+    random_blogs = sample(list(all_blogs), min(3, all_blogs.count()))
+
+    context = {
+        'total_messages_count': total_messages_count,
+        'active_logs_count': active_logs_count,
+        'active_clients_count': active_clients_count,
+        'random_blogs': random_blogs
+    }
+
+    return render(request, 'mailings/main_page.html', context)
+
+
 class MessageListView(ListView):
-    """ shows main page"""
+    """ shows all messages"""
     model = Message
-    template_name = 'mailings/main_page.html'
+    template_name = 'mailings/message_list.html'
 
 
 class MessageDetailView(DetailView):

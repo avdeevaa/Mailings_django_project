@@ -41,6 +41,10 @@ INSTALLED_APPS = [
 
     'mailings',
     'mailings.templatetags',
+    'users',
+
+    'crispy_forms',
+
 ]
 
 MIDDLEWARE = [
@@ -144,6 +148,32 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'project.skypro@yandex.ru'
 EMAIL_HOST_PASSWORD = 'zjkibdkpeflxlouk'
 EMAIL_USE_TLS = True
+
+AUTH_USER_MODEL = "users.User"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+LOGIN_URL = "/users/"
+
+# cache
+
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.redis.RedisCache",
+#         "LOCATION": "redis://127.0.0.1:6379",
+#     }
+# }
+#
+# CACHE_ENABLED=True
+#
+# if CACHE_ENABLED:
+#     CACHES = {
+#         "default": {
+#             "BACKEND": "django.core.cache.backends.redis.RedisCache",
+#             "LOCATION": os.getenv('CACHE_LOCATION'),
+#             "TIMEOUT": 300 # Ручная регулировка времени жизни кеша в секундах, по умолчанию 300
+#         }
+#     }
+#
 
 
 

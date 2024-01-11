@@ -1,0 +1,54 @@
+{% extends 'mailings/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+      <h1 class="display-4 fw-normal text-body-emphasis">Сервис управления рассылками</h1>
+</div>
+</header>
+
+<main>
+    <div class="row row-cols-1 row-cols-md-3 mb-6 text-center">
+        <div class="col-md-12">
+
+            <div class="card mb-4 rounded-6 shadow-sm">
+                <div class="card-header py-3">
+                    <h4 class="my-0 fw-normal">Вся информация о рассылках</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>Общее количество рассылок: {{ total_messages_count }}</li>
+                        <li>Количество проведенных активных рассылок: {{ active_logs_count }}</li>
+                        <li>Общее количество активных клиентов: {{ active_clients_count }}</li>
+                    </ul>
+                    <a class="w-100 btn btn-lg btn-success" href="{% url 'mailings:all_messages' %}">Просмотреть рассылки</a>
+                </div>
+            </div>
+
+            <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+                <h2 class="display-4 fw-normal text-body-emphasis">У нас так же есть блог...</h2>
+            </div>
+        </div>
+            <div class="col-md-12">
+            <div class="card mb-4 rounded-6 shadow-sm">
+                {% for blog in random_blogs %}
+                <div class="card-header py-3">
+                    <h4 class="my-0 fw-normal">{{ blog.title }}</h4>
+                </div>
+                <div class="card-body">
+                        <p>{{ blog.content|slice:":150" }}</p>
+                        <a class="w-100 btn btn-outline-success" href="{% url 'mailings:view_blog' blog.pk %}">Просмотреть</a>
+                </div>
+                {% endfor %}
+            </div>
+       </div>
+    </div>
+</main>
+
+<!--<div class="pricing-header p-3 pb-md-4 mx-auto text-center">-->
+<!--      <h2 class="display-4 fw-normal text-body-emphasis">У нас так же есть блог...</h2>-->
+<!--</div>-->
+
+
+{% endblock %}

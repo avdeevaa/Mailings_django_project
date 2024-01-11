@@ -1,0 +1,31 @@
+{% extends 'mailings/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<main>
+    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+        <div class="col">
+
+            <div class="card mb-4 rounded-3 shadow-sm">
+                <div class="card-header py-3">
+                    <h4 class="my-0 fw-normal">{{ client.name }} {{ client.surname }}</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>{{ client.email }}</li>
+                        <li>{{ client.comment }}</li>
+                    </ul>
+                    <h4 class="text-danger">Хотите удалить?</h4>
+                     <form method="post" action="{% url 'mailings:delete_message' object.pk %}">
+                        {% csrf_token %}
+                        <input class="submit" type="submit" name="contact_submitted" value="подтвердить" />
+                     </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+{% endblock %}

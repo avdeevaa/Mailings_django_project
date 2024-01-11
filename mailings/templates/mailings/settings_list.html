@@ -1,0 +1,41 @@
+{% extends 'mailings/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+      <p class="fs-5 text-body-secondary">На этой страничке вы можете просмотреть все возможные настройки рассылки</p>
+      <p class="fs-5 text-body-secondary">Настройки можно просматривать в списке или создавать новые, менять и удалять можно только в админке</p>
+    </div>
+  </header>
+
+
+<main>
+  <div class="container">
+    <div class="row">
+      {% for settings in object_list %}
+        <div class="col-md-4">
+          <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3">
+              <h4 class="my-0 fw-normal">Рассылка {{ settings.pk }}</h4>
+            </div>
+            <div class="card-body">
+              <ul class="list-unstyled mt-3 mb-4">
+                <li>Время рассылки: {{ settings.mailing_time }}</li>
+                <li>Периодичность: {{ settings.periodicity}}</li>
+                <li>Статус: {{ settings.status}}</li>
+                <li>Клиент: {{ settings.client}}</li>
+              </ul>
+              <a class="w-100 btn btn-lg btn btn-outline-warning" href="{% url 'mailings:create_settings' %}">Добавить новую</a>
+            </div>
+          </div>
+        </div>
+
+        {% if forloop.counter|divisibleby:3 and not forloop.last %}
+          </div><div class="row">
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</main>
+
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'mailings/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div id="content">
+        <h1>Информация о вас?</h1>
+           <form method="post" enctype="multipart/form-data">
+               {% csrf_token %}
+               {{ form.as_p }}
+           <p style="padding-top: 15px"><span>&nbsp;</span><input class="submit" type="submit" name="contact_submitted" value="подтвердить" /></p>
+            </form>
+        <a href="{% url 'users:generate_new_password' %}">Создать новый пароль?</a>
+      </div>
+
+{% endblock %}

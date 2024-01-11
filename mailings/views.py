@@ -1,5 +1,6 @@
 from random import sample
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, reverse
 from mailings.models import Message, Client, Settings, Logs, Blog
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -36,7 +37,7 @@ class MessageDetailView(DetailView):
     template_name = 'mailings/message_detail.html'
 
 
-class MessageUpdateView(UpdateView):
+class MessageUpdateView(LoginRequiredMixin, UpdateView):
     """makes changes in the model Massage == UPDATE"""
     model = Message
     fields = ('subject', 'body', 'settings')
@@ -46,7 +47,7 @@ class MessageUpdateView(UpdateView):
         return reverse('mailings:main_page')
 
 
-class MessageDeleteView(DeleteView):
+class MessageDeleteView(LoginRequiredMixin, DeleteView):
     """deletes one model of Message"""
     model = Message
     template_name = 'mailings/message_confirm_delete.html'
@@ -55,7 +56,7 @@ class MessageDeleteView(DeleteView):
         return reverse('mailings:main_page')
 
 
-class MessageCreateView(CreateView):
+class MessageCreateView(LoginRequiredMixin, CreateView):
     model = Message
     fields = ('subject', 'body', 'settings')
     template_name = 'mailings/message_form.html'
@@ -76,7 +77,7 @@ class ClientDetailView(DetailView):
     template_name = 'mailings/client_detail.html'
 
 
-class ClientUpdateView(UpdateView):
+class ClientUpdateView(LoginRequiredMixin, UpdateView):
     """makes changes in the model Client == UPDATE"""
     model = Client
     fields = ('name', 'fathers_name', 'surname', 'email', 'comment')
@@ -86,7 +87,7 @@ class ClientUpdateView(UpdateView):
         return reverse('mailings:all_clients')
 
 
-class ClientCreateView(CreateView):
+class ClientCreateView(LoginRequiredMixin, CreateView):
     model = Client
     fields = ('name', 'fathers_name', 'surname', 'email', 'comment')
     template_name = 'mailings/client_form.html'
@@ -95,7 +96,7 @@ class ClientCreateView(CreateView):
         return reverse('mailings:all_clients')
 
 
-class ClientDeleteView(DeleteView):
+class ClientDeleteView(LoginRequiredMixin, DeleteView):
     """deletes one model of Client"""
     model = Client
     template_name = 'mailings/client_confirm_delete.html'
@@ -110,7 +111,7 @@ class SettingsListView(ListView):
     template_name = 'mailings/settings_list.html'
 
 
-class SettingsCreateView(CreateView):
+class SettingsCreateView(LoginRequiredMixin, CreateView):
     model = Settings
     fields = ('periodicity', 'status', 'client', 'message')
     template_name = 'mailings/settings_form.html'
@@ -137,7 +138,7 @@ class BlogCreateView(CreateView):
         return reverse('mailings:read_blog')
 
 
-class BlogUpdateView(UpdateView):
+class BlogUpdateView(LoginRequiredMixin, UpdateView):
     model = Blog
     fields = ('title', 'content', 'image', 'date_of_publication')
     template_name = 'mailings/blog_form.html'
@@ -151,7 +152,7 @@ class BlogListView(ListView):
     template_name = 'mailings/blog_list.html'
 
 
-class BlogDetailView(DetailView):
+class BlogDetailView(LoginRequiredMixin, DetailView):
     model = Blog
     template_name = 'mailings/blog_detail.html'
 
@@ -162,7 +163,7 @@ class BlogDetailView(DetailView):
         return self.object
 
 
-class BlogDeleteView(DeleteView):
+class BlogDeleteView(LoginRequiredMixin, DeleteView):
     model = Blog
     template_name = 'mailings/blog_confirm_delete.html'
 

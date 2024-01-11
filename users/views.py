@@ -1,5 +1,7 @@
 import random
 
+from django.contrib.auth import logout
+
 from django.conf import settings
 from django.core.mail import send_mail
 from django.shortcuts import render, reverse, redirect
@@ -38,7 +40,7 @@ class ProfileView(UpdateView):
         return self.request.user
 
     def get_success_url(self):
-        return reverse('catalog:main_page')
+        return reverse('mailings:main_page')
 
 
 def generate_new_password(request):
@@ -52,7 +54,14 @@ def generate_new_password(request):
             )
     request.user.set_password(new_password)
     request.user.save()
-    return redirect(reverse('catalog:main_page'))
+    return redirect(reverse('mailings:main_page'))
+
+
+def logout_view(request):
+    logout(request)
+
+    return redirect('mailings:main_page')
+
 
 
 

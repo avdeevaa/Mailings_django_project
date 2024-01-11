@@ -1,4 +1,6 @@
 from django.urls import path
+from django.views.decorators.cache import cache_page
+
 from mailings.views import MessageListView, MessageDetailView, MessageUpdateView, MessageDeleteView, MessageCreateView, \
     LogsListView, BlogDeleteView, BlogCreateView, BlogListView, BlogUpdateView, BlogDetailView, main_page
 from mailings.views import ClientListView, ClientDetailView, ClientUpdateView, ClientCreateView, ClientDeleteView
@@ -8,8 +10,8 @@ app_name = 'mailings'
 
 
 urlpatterns = [
-    path('', main_page, name='main_page'),
-    path('main/', main_page, name='main_page'),
+    path('', cache_page(60)(main_page), name='main_page'),
+    path('main/', cache_page(60)(main_page), name='main_page'),
 
     path('messages/', MessageListView.as_view(), name='all_messages'),
     path('message/<int:pk>/', MessageDetailView.as_view(), name='message_detail'),
@@ -29,7 +31,7 @@ urlpatterns = [
     path('logs/', LogsListView.as_view(), name='all_logs'),
 
     path('create-blog/', BlogCreateView.as_view(), name='create_blog'),
-    path('blog/', BlogListView.as_view(), name='read_blog'),
+    path('blog/', cache_page(60)(BlogListView.as_view()), name='read_blog'),
     path('update-blog/<int:pk>/', BlogUpdateView.as_view(), name='update_blog'),
     path('delete-blog/<int:pk>/', BlogDeleteView.as_view(), name='delete_blog'),
     path('view-blog/<int:pk>/', BlogDetailView.as_view(), name='view_blog'),
